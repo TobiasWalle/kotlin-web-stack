@@ -1,4 +1,4 @@
-package com.tobiaswalle.kotlin.web.stack.core
+package com.tobiaswalle.kotlin.web.stack.application
 
 import com.tobiaswalle.kotlin.web.stack.framework.Controller
 import com.tobiaswalle.kotlin.web.stack.users.UserController
