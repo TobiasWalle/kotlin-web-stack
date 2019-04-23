@@ -1,97 +1,86 @@
 package com.tobiaswalle.kotlin.web.stack.documentation
 
-import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.tobiaswalle.kotlin.web.stack.testing.objectMapper
+import com.tobiaswalle.kotlin.web.stack.testing.objectWriter
 import io.javalin.Javalin
-import io.swagger.v3.oas.models.OpenAPI
-import io.swagger.v3.oas.models.Operation
-import io.swagger.v3.oas.models.PathItem
-import io.swagger.v3.oas.models.Paths
+import io.swagger.v3.oas.models.*
 import io.swagger.v3.oas.models.info.Info
+import io.swagger.v3.oas.models.media.Content
+import io.swagger.v3.oas.models.media.MediaType
+import io.swagger.v3.oas.models.media.Schema
 import io.swagger.v3.oas.models.responses.ApiResponse
 import io.swagger.v3.oas.models.responses.ApiResponses
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 internal class OpenAPIJavalinTest {
+  private class User(val name: String)
 
-    private class User(val name: String)
+  @Test
+  fun `createSchema should work with simple schema`() {
+    val app = Javalin.create()
+    app.get("/user", documented {
+      it.json(User(name = "Jim"))
+    }.respondWith<User>("200"))
+    app.put("/user", documented { })
 
-    private class Tweet(val content: String)
+    val options = DocumentationOptions(
+      version = "1.0.0",
+      title = "Example",
+      javalin = app,
+      objectMapper = objectMapper
+    )
+    val userSchema = Schema<Any>()
+      .type("object")
+      .addProperties("name", Schema<Any>().type("string"))
+      .required(listOf("name"))
+      .additionalProperties(false)
 
-    @Test
-    fun `createSchema should create an open api schema`() {
-
-        val app = Javalin.create()
-        app.get("/users", documented {
-            it.json(
-                listOf(
-                    User(name = "Jim"),
-                    User(name = "Tim")
+    val expectedGetUserOperation = Operation()
+      .responses(
+        ApiResponses().addApiResponse(
+          "200", ApiResponse()
+            .description("")
+            .content(
+              Content()
+                .addMediaType(
+                  "application/json", MediaType()
+                    .schema(Schema<Any>().`$ref`("#/components/schemas/User"))
                 )
             )
-        })
-        app.put("/users", documented { })
-        app.get("/tweets", documented {
-            it.json(
-                listOf(
-                    Tweet(content = "How are you?")
-                )
-            )
-        })
-        app.post("/tweets", documented {})
-        val options = DocumentationOptions(
-            version = "1.0.0",
-            title = "Example",
-            javalin = app
         )
 
-        val expectedOpenApi = OpenAPI().apply {
-            info = Info().apply {
-                version = "1.0.0"
-                title = "Example"
-            }
-            paths = Paths().apply {
-                addPathItem("/users", PathItem().apply {
-                    get = Operation().apply {
-                        responses = ApiResponses().apply {
-                            addApiResponse("200", ApiResponse().apply {
-                                description = ""
-                            })
-                        }
-                    }
-                    put = Operation().apply {
-                        responses = ApiResponses().apply {
-                            addApiResponse("200", ApiResponse().apply {
-                                description = ""
-                            })
-                        }
-                    }
-                })
-                addPathItem("/tweets", PathItem().apply {
-                    get = Operation().apply {
-                        responses = ApiResponses().apply {
-                            addApiResponse("200", ApiResponse().apply {
-                                description = ""
-                            })
-                        }
-                    }
-                    post = Operation().apply {
-                        responses = ApiResponses().apply {
-                            addApiResponse("200", ApiResponse().apply {
-                                description = ""
-                            })
-                        }
-                    }
-                })
-            }
-        }
+      )
+    val expectedPutUserOperation = Operation()
+      .responses(
+        ApiResponses().addApiResponse(
+          "200",
+          ApiResponse().description("")
+        )
+      )
+    val expectedOpenApi = OpenAPI()
+      .info(
+        Info()
+          .version("1.0.0")
+          .title("Example")
+      )
+      .paths(
+        Paths().addPathItem(
+          "/user",
+          PathItem()
+            .get(expectedGetUserOperation)
+            .put(expectedPutUserOperation)
+        )
+      )
+      .components(Components()
+        .schemas(mapOf(
+          "User" to userSchema
+        ))
+      )
 
-        val objectMapper = ObjectMapper()
-            .setSerializationInclusion(JsonInclude.Include.NON_NULL)
-            .writerWithDefaultPrettyPrinter()
-        val actual = OpenApiJavalin.createSchema(options)
+    val actual = OpenApiJavalin.createSchema(options)
 
-        assertThat(objectMapper.writeValueAsString(actual)).isEqualTo(objectMapper.writeValueAsString(expectedOpenApi))
-    }
+    println(objectWriter.writeValueAsString(actual))
+    assertThat(objectWriter.writeValueAsString(actual)).isEqualTo(objectWriter.writeValueAsString(expectedOpenApi))
+  }
 }
