@@ -19,6 +19,10 @@ class MyObject(
   val e: SubObject
 )
 
+class ObjectWithList(
+  val items: List<SubObject>
+)
+
 internal class AsOpenApiSchemaKtTest {
   @Test
   fun `Class#asOpenApiSchema should work with objects`() {
@@ -48,7 +52,89 @@ internal class AsOpenApiSchemaKtTest {
     )
     val (mainRef, actualDefinitions) = MyObject::class.asOpenApiSchema(objectMapper)
 
-    assertThat(mainRef).isEqualTo("#/components/schemas/MyObject")
+    assertThat(mainRef).isEqualTo(Schema<Any>().`$ref`("#/components/schemas/MyObject"))
+    assertThat(
+      objectWriter.writeValueAsString(
+        actualDefinitions
+      )
+    ).isEqualTo(
+      objectWriter.writeValueAsString(
+        expectedDefinitions
+      )
+    )
+  }
+
+  @Test
+  fun `Class#asOpenApiSchema should work with arrays`() {
+    val subObjectSchema = ObjectSchema()
+      .additionalProperties(false)
+      .properties(
+        mutableMapOf(
+          "a" to Schema<Any>().type("integer")
+        )
+      )
+      .required(listOf("a"))
+    val expectedDefinitions = mapOf(
+      "SubObject" to subObjectSchema
+    )
+    val subObjectSchemaRef = Schema<Any>().`$ref`("#/components/schemas/SubObject")
+    val (mainRef, actualDefinitions) = Array<SubObject>::class.asOpenApiSchema(objectMapper)
+
+    assertThat(
+      objectWriter.writeValueAsString(
+        mainRef
+      )
+    ).isEqualTo(
+      objectWriter.writeValueAsString(
+        ArraySchema().items(subObjectSchemaRef)
+      )
+    )
+    assertThat(
+      objectWriter.writeValueAsString(
+        actualDefinitions
+      )
+    ).isEqualTo(
+      objectWriter.writeValueAsString(
+        expectedDefinitions
+      )
+    )
+  }
+
+  @Test
+  fun `Class#asOpenApiSchema should work with arrays in objects`() {
+    val subObjectSchema = ObjectSchema()
+      .additionalProperties(false)
+      .properties(
+        mutableMapOf(
+          "a" to Schema<Any>().type("integer")
+        )
+      )
+      .required(listOf("a"))
+    val subObjectSchemaRef = Schema<Any>().`$ref`("#/components/schemas/SubObject")
+    val objectWithListSchema = ObjectSchema()
+      .additionalProperties(false)
+      .properties(
+        mutableMapOf(
+          "items" to ArraySchema().items(subObjectSchemaRef)
+        )
+      )
+      .required(listOf("items"))
+    val expectedDefinitions = mapOf(
+      "ObjectWithList" to objectWithListSchema,
+      "SubObject" to subObjectSchema
+
+    )
+    val (mainRef, actualDefinitions) = ObjectWithList::class.asOpenApiSchema(objectMapper)
+
+    assertThat(
+      objectWriter.writeValueAsString(
+        mainRef
+      )
+    ).isEqualTo(
+      objectWriter.writeValueAsString(
+        Schema<Any>().`$ref`("#/components/schemas/ObjectWithList")
+      )
+    )
     assertThat(
       objectWriter.writeValueAsString(
         actualDefinitions

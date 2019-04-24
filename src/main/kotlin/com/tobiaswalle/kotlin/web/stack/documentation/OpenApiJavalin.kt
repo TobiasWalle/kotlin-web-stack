@@ -81,7 +81,7 @@ object OpenApiJavalin {
           .apply {
             documentedHandler?.responses
               ?.forEach { (name, response) ->
-                val (ref, newDefinitions) = response.returnType.asOpenApiSchema(objectMapper)
+                val (returnTypeSchema, newDefinitions) = response.returnType.asOpenApiSchema(objectMapper)
                 components.addSchemas(newDefinitions)
                 addApiResponse(
                   name, ApiResponse()
@@ -90,7 +90,7 @@ object OpenApiJavalin {
                       Content()
                         .addMediaType(
                           "application/json", MediaType()
-                            .schema(Schema<Any>().`$ref`(ref))
+                            .schema(returnTypeSchema)
                         )
                     )
                 )
