@@ -1,5 +1,6 @@
 package com.tobiaswalle.kotlin.web.stack.users
 
+import com.tobiaswalle.kotlin.web.stack.documentation.documented
 import com.tobiaswalle.kotlin.web.stack.framework.Controller
 import com.tobiaswalle.kotlin.web.stack.users.models.User
 import io.javalin.apibuilder.ApiBuilder.get
@@ -9,13 +10,13 @@ class UserController(
   private val userService: UserService
 ) : Controller {
   override fun addEndpoints() {
-    put("/") {
+    put("/", documented {
       val user = it.body<User>()
       userService.add(user)
-    }
+    })
 
-    get("/") {
+    get("/", documented {
       it.json(userService.getAll())
-    }
+    }.respondWith<List<User>>("200"))
   }
 }
