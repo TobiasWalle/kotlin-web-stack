@@ -17,6 +17,6 @@ class UserController(
 
     get("/", documented {
       it.json(userService.getAll())
-    }.respondWith<List<User>>("200"))
+    }.respondWith("200", Array<User>::class))
   }
 }

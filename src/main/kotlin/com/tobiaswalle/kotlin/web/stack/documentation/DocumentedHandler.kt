@@ -2,6 +2,7 @@ package com.tobiaswalle.kotlin.web.stack.documentation
 
 import io.javalin.Context
 import io.javalin.Handler
+import kotlin.reflect.KClass
 
 typealias HandleRequest = (ctx: Context) -> Unit
 
@@ -14,8 +15,8 @@ class DocumentedHandler(
 
   val responses = mutableMapOf<String, DocumentedResponse>()
 
-  inline fun <reified T> respondWith(name: String): DocumentedHandler {
-    return respondWith(name, T::class.java)
+  fun respondWith(name: String, returnType: KClass<*>): DocumentedHandler {
+    return respondWith(name, returnType.java)
   }
 
   fun respondWith(name: String, returnType: Class<*>): DocumentedHandler {

@@ -21,7 +21,7 @@ internal class OpenAPIJavalinTest {
     val app = Javalin.create()
     app.get("/user", documented {
       it.json(User(name = "Jim"))
-    }.respondWith<User>("200"))
+    }.respondWith("200", User::class))
     app.put("/user", documented { })
 
     val options = DocumentationOptions(
