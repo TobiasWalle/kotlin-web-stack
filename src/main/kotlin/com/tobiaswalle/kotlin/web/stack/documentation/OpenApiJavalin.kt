@@ -81,7 +81,6 @@ object OpenApiJavalin {
   ): ApiResponses {
     val documentedHandler = this
     val apiResponses = ApiResponses()
-      .addApiResponse("200", ApiResponse().description(""))
     documentedHandler
       .responses
       .forEach { (name, response) ->

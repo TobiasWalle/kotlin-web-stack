@@ -53,10 +53,7 @@ internal class OpenAPIJavalinTest {
       )
     val expectedPutUserOperation = Operation()
       .responses(
-        ApiResponses().addApiResponse(
-          "200",
-          ApiResponse().description("")
-        )
+        ApiResponses()
       )
     val expectedOpenApi = OpenAPI()
       .info(
