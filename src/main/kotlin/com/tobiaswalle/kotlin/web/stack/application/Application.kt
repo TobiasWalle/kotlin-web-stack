@@ -12,7 +12,6 @@ class Application(
   fun start() {
     JavalinJackson.configure(objectMapper)
     with(javalin) {
-      enableStaticFiles("../resources/public")
       routes(applicationRouter)
       start()
     }
