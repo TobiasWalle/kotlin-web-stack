@@ -1,8 +1,8 @@
 package com.tobiaswalle.kotlin.web.stack.documentation
 
 import com.tobiaswalle.kotlin.web.stack.documentation.configuration.DocumentationOptions
-import com.tobiaswalle.kotlin.web.stack.documentation.models.documented
 import com.tobiaswalle.kotlin.web.stack.documentation.generation.OpenApiJavalin
+import com.tobiaswalle.kotlin.web.stack.documentation.models.documented
 import com.tobiaswalle.kotlin.web.stack.testing.objectMapper
 import com.tobiaswalle.kotlin.web.stack.testing.objectWriter
 import io.javalin.Javalin
@@ -76,10 +76,13 @@ internal class OpenAPIJavalinTest {
             .put(expectedPutUserOperation)
         )
       )
-      .components(Components()
-        .schemas(mapOf(
-          "User" to userSchema
-        ))
+      .components(
+        Components()
+          .schemas(
+            mapOf(
+              "User" to userSchema
+            )
+          )
       )
 
     val actual = OpenApiJavalin.createSchema(options)

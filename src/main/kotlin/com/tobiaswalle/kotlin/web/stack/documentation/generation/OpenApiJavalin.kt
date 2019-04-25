@@ -37,7 +37,8 @@ object OpenApiJavalin {
       javalin.handlerMetaInfo
         .groupBy { it.path }
         .forEach { (path, metaInfos) ->
-          addPathItem(path,
+          addPathItem(
+            path,
             createPathItem(
               options,
               components,
