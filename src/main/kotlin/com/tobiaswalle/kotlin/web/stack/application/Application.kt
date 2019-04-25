@@ -7,12 +7,14 @@ import io.javalin.json.JavalinJackson
 class Application(
   private val javalin: Javalin,
   private val objectMapper: ObjectMapper,
-  private val coreController: CoreController
+  private val applicationController: ApplicationController
 ) {
   fun start() {
     JavalinJackson.configure(objectMapper)
-    javalin.enableStaticFiles("../resources/public")
-    javalin.routes(coreController)
-    javalin.start()
+    with(javalin) {
+      enableStaticFiles("../resources/public")
+      routes(applicationController)
+      start()
+    }
   }
 }

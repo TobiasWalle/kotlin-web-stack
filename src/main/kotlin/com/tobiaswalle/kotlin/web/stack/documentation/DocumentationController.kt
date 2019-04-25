@@ -1,7 +1,9 @@
 package com.tobiaswalle.kotlin.web.stack.documentation
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.tobiaswalle.kotlin.web.stack.framework.Controller
+import com.tobiaswalle.kotlin.web.stack.documentation.configuration.DocumentationOptions
+import com.tobiaswalle.kotlin.web.stack.documentation.generation.OpenApiJavalin
+import com.tobiaswalle.kotlin.web.stack.http.Controller
 import io.javalin.Javalin
 import io.javalin.apibuilder.ApiBuilder.get
 
@@ -11,13 +13,15 @@ class DocumentationController(
 ) : Controller {
   override fun addEndpoints() {
     get("swagger.json") {
-      it.json(OpenApiJavalin.createSchema(
+      it.json(
+        OpenApiJavalin.createSchema(
         DocumentationOptions(
-        javalin = javalin,
-        version = "1.0",
-        title = "MyApi",
-        objectMapper = objectMapper
-      )))
+          javalin = javalin,
+          version = "1.0",
+          title = "MyApi",
+          objectMapper = objectMapper
+        )
+      ))
     }
   }
 }

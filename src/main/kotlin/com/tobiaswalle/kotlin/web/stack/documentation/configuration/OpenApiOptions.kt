@@ -1,4 +1,4 @@
-package com.tobiaswalle.kotlin.web.stack.documentation
+package com.tobiaswalle.kotlin.web.stack.documentation.configuration
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.javalin.Javalin

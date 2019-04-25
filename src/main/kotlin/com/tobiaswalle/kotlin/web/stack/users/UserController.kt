@@ -1,7 +1,7 @@
 package com.tobiaswalle.kotlin.web.stack.users
 
-import com.tobiaswalle.kotlin.web.stack.documentation.documented
-import com.tobiaswalle.kotlin.web.stack.framework.Controller
+import com.tobiaswalle.kotlin.web.stack.documentation.models.documented
+import com.tobiaswalle.kotlin.web.stack.http.Controller
 import com.tobiaswalle.kotlin.web.stack.users.models.User
 import io.javalin.apibuilder.ApiBuilder.get
 import io.javalin.apibuilder.ApiBuilder.put

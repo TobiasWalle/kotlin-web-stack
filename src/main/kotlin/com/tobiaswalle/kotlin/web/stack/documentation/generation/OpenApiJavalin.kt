@@ -1,5 +1,8 @@
-package com.tobiaswalle.kotlin.web.stack.documentation
+package com.tobiaswalle.kotlin.web.stack.documentation.generation
 
+import com.tobiaswalle.kotlin.web.stack.documentation.configuration.DocumentationOptions
+import com.tobiaswalle.kotlin.web.stack.documentation.models.DocumentedHandler
+import com.tobiaswalle.kotlin.web.stack.documentation.models.DocumentedResponse
 import io.javalin.HandlerMetaInfo
 import io.javalin.core.HandlerType
 import io.swagger.v3.oas.models.*
@@ -15,7 +18,8 @@ object OpenApiJavalin {
     val openApiComponents = OpenApiComponents()
     return OpenAPI().apply {
       info = createOpenApiInfo(options)
-      paths = createPaths(options, openApiComponents)
+      paths =
+        createPaths(options, openApiComponents)
       components = Components().schemas(openApiComponents.schemas)
     }
   }
@@ -33,7 +37,13 @@ object OpenApiJavalin {
       javalin.handlerMetaInfo
         .groupBy { it.path }
         .forEach { (path, metaInfos) ->
-          addPathItem(path, createPathItem(options, components, metaInfos))
+          addPathItem(path,
+            createPathItem(
+              options,
+              components,
+              metaInfos
+            )
+          )
         }
     }
   }
@@ -45,7 +55,11 @@ object OpenApiJavalin {
   ): PathItem {
     return PathItem().apply {
       metaInfos.forEach { metaInfo ->
-        val operation = createOperation(options, components, metaInfo)
+        val operation = createOperation(
+          options,
+          components,
+          metaInfo
+        )
         when (metaInfo.httpMethod) {
           HandlerType.GET -> this.get = operation
           HandlerType.PUT -> this.put = operation

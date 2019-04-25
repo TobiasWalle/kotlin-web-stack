@@ -1,12 +1,8 @@
-package com.tobiaswalle.kotlin.web.stack.documentation
+package com.tobiaswalle.kotlin.web.stack.documentation.models
 
 import io.javalin.Context
 import io.javalin.Handler
 import kotlin.reflect.KClass
-
-typealias HandleRequest = (ctx: Context) -> Unit
-
-fun documented(handle: HandleRequest): DocumentedHandler = DocumentedHandler(handle)
 
 class DocumentedHandler(
   private val handleRequest: HandleRequest
@@ -25,7 +21,6 @@ class DocumentedHandler(
   }
 }
 
-class DocumentedResponse(
-  val name: String,
-  val returnType: Class<*>
-)
+fun documented(handle: HandleRequest): DocumentedHandler = DocumentedHandler(handle)
+
+typealias HandleRequest = (ctx: Context) -> Unit

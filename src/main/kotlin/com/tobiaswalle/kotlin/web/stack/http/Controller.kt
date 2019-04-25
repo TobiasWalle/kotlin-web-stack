@@ -1,4 +1,4 @@
-package com.tobiaswalle.kotlin.web.stack.framework
+package com.tobiaswalle.kotlin.web.stack.http
 
 import io.javalin.apibuilder.EndpointGroup
 

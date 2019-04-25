@@ -1,6 +1,7 @@
 package com.tobiaswalle.kotlin.web.stack.documentation
 
 import com.fasterxml.jackson.module.jsonSchema.types.ReferenceSchema
+import com.tobiaswalle.kotlin.web.stack.documentation.generation.asOpenApiSchema
 import com.tobiaswalle.kotlin.web.stack.testing.objectMapper
 import com.tobiaswalle.kotlin.web.stack.testing.objectWriter
 import io.swagger.v3.oas.models.media.*
