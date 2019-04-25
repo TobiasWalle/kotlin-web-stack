@@ -1,6 +1,11 @@
 plugins {
-    id 'java'
-    id 'org.jetbrains.kotlin.jvm' version '1.3.21'
+  id 'application'
+  id 'java'
+  id 'org.jetbrains.kotlin.jvm' version '1.3.21'
+}
+
+application {
+  mainClassName = 'com.tobiaswalle.kotlin.web.stack.MainKt'
 }
 
 group 'com.tobiaswalle'
@@ -9,14 +14,14 @@ version '1.0-SNAPSHOT'
 sourceCompatibility = 1.8
 
 repositories {
-    mavenCentral()
-    jcenter()
+  mavenCentral()
+  jcenter()
 }
 
 test {
-    useJUnitPlatform()
+  useJUnitPlatform()
 
-    dependsOn("cleanTest")
+  dependsOn("cleanTest")
 }
 
 def koin_version = "2.0.0-rc-2"
@@ -24,24 +29,24 @@ def junit_version = "5.4.2"
 def jackson_version = "2.9.8"
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    implementation "org.koin:koin-core:$koin_version"
-    implementation "io.swagger.core.v3:swagger-models:2.0.7"
-    implementation "io.javalin:javalin:2.8.0"
-    implementation "org.slf4j:slf4j-simple:1.7.26"
-    implementation "com.fasterxml.jackson.core:jackson-databind:$jackson_version"
-    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:$jackson_version"
-    implementation "com.fasterxml.jackson.module:jackson-module-jsonSchema:$jackson_version"
-    implementation "com.kjetland:mbknor-jackson-jsonschema_2.12:1.0.34"
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+  implementation "org.koin:koin-core:$koin_version"
+  implementation "io.swagger.core.v3:swagger-models:2.0.7"
+  implementation "io.javalin:javalin:2.8.0"
+  implementation "org.slf4j:slf4j-simple:1.7.26"
+  implementation "com.fasterxml.jackson.core:jackson-databind:$jackson_version"
+  implementation "com.fasterxml.jackson.module:jackson-module-kotlin:$jackson_version"
+  implementation "com.fasterxml.jackson.module:jackson-module-jsonSchema:$jackson_version"
+  implementation "com.kjetland:mbknor-jackson-jsonschema_2.12:1.0.34"
 
-    testImplementation "org.assertj:assertj-core:3.11.1"
-    testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_version"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_version"
+  testImplementation "org.assertj:assertj-core:3.11.1"
+  testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_version"
+  testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_version"
 }
 
 compileKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+  kotlinOptions.jvmTarget = "1.8"
 }
 compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+  kotlinOptions.jvmTarget = "1.8"
 }
