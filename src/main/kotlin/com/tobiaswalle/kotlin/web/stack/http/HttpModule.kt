@@ -4,5 +4,10 @@ import io.javalin.Javalin
 import org.koin.dsl.module
 
 val HttpModule = module {
-  single { Javalin.create() }
+  single {
+    Javalin
+      .create()
+      .disableStartupBanner()
+      .enableDebugLogging()
+  }
 }
