@@ -3,14 +3,14 @@ package com.tobiaswalle.kotlin.web.stack.documentation
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.tobiaswalle.kotlin.web.stack.documentation.configuration.DocumentationOptions
 import com.tobiaswalle.kotlin.web.stack.documentation.generation.OpenApiJavalin
-import com.tobiaswalle.kotlin.web.stack.http.Controller
+import com.tobiaswalle.kotlin.web.stack.http.Router
 import io.javalin.Javalin
 import io.javalin.apibuilder.ApiBuilder.get
 
-class DocumentationController(
+class DocumentationRouter(
   private val javalin: Javalin,
   private val objectMapper: ObjectMapper
-) : Controller {
+) : Router {
   override fun addEndpoints() {
     get("swagger.json") {
       it.json(

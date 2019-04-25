@@ -4,5 +4,5 @@ import org.koin.dsl.module
 
 val UserModule = module {
   single { UserService() }
-  single { UserController(get()) }
+  single { UserRouter(get()) }
 }
