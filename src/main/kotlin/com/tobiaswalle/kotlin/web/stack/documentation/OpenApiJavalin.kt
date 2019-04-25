@@ -72,8 +72,24 @@ object OpenApiJavalin {
       null
     }
     return Operation()
+      .summary(createDefaultSummary(metaInfo))
+      .operationId(createDefaultOperationId(metaInfo))
       .responses(documentedHandler?.createOpenApiResponses(options, components))
   }
+
+  private fun createDefaultOperationId(metaInfo: HandlerMetaInfo): String {
+    val lowerCaseMethod = metaInfo.httpMethod.toString().toLowerCase()
+    val capitalizedPath = splitPath(metaInfo.path).joinToString("") { it.capitalize() }
+    return lowerCaseMethod + capitalizedPath
+  }
+
+  private fun createDefaultSummary(metaInfo: HandlerMetaInfo): String {
+    val capitalizedMethod = metaInfo.httpMethod.toString().toLowerCase().capitalize()
+    val path = splitPath(metaInfo.path)
+    return (listOf(capitalizedMethod) + path).joinToString(" ") { it.trim() }
+  }
+
+  private fun splitPath(path: String) = path.split("/").filter { it.isNotEmpty() }
 
   private fun DocumentedHandler.createOpenApiResponses(
     options: DocumentationOptions,

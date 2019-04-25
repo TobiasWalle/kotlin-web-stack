@@ -37,6 +37,8 @@ internal class OpenAPIJavalinTest {
       .additionalProperties(false)
 
     val expectedGetUserOperation = Operation()
+      .summary("Get user")
+      .operationId("getUser")
       .responses(
         ApiResponses().addApiResponse(
           "200", ApiResponse()
@@ -52,6 +54,8 @@ internal class OpenAPIJavalinTest {
 
       )
     val expectedPutUserOperation = Operation()
+      .summary("Put user")
+      .operationId("putUser")
       .responses(
         ApiResponses()
       )
