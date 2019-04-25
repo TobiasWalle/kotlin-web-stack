@@ -80,7 +80,6 @@ internal class OpenAPIJavalinTest {
 
     val actual = OpenApiJavalin.createSchema(options)
 
-    println(objectWriter.writeValueAsString(actual))
     assertThat(objectWriter.writeValueAsString(actual)).isEqualTo(objectWriter.writeValueAsString(expectedOpenApi))
   }
 }

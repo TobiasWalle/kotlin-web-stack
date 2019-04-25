@@ -71,31 +71,44 @@ object OpenApiJavalin {
     } catch (e: ClassCastException) {
       null
     }
-    val objectMapper = options.objectMapper
     return Operation()
-      .responses(
-        ApiResponses()
-          .addApiResponse(
-            "200", ApiResponse().description("")
+      .responses(documentedHandler?.createOpenApiResponses(options, components))
+  }
+
+  private fun DocumentedHandler.createOpenApiResponses(
+    options: DocumentationOptions,
+    components: OpenApiComponents
+  ): ApiResponses {
+    val documentedHandler = this
+    val apiResponses = ApiResponses()
+      .addApiResponse("200", ApiResponse().description(""))
+    documentedHandler
+      .responses
+      .forEach { (name, response) ->
+        apiResponses.addApiResponse(
+          name,
+          response.createOpenApiResponse(options, components)
+        )
+      }
+    return apiResponses
+  }
+
+  private fun DocumentedResponse.createOpenApiResponse(
+    options: DocumentationOptions,
+    components: OpenApiComponents
+  ): ApiResponse {
+    val objectMapper = options.objectMapper
+    val response = this
+    val (returnTypeSchema, newSchemas) = response.returnType.asOpenApiSchema(objectMapper)
+    components.addSchemas(newSchemas)
+    return ApiResponse()
+      .description("")
+      .content(
+        Content()
+          .addMediaType(
+            "application/json", MediaType()
+              .schema(returnTypeSchema)
           )
-          .apply {
-            documentedHandler?.responses
-              ?.forEach { (name, response) ->
-                val (returnTypeSchema, newDefinitions) = response.returnType.asOpenApiSchema(objectMapper)
-                components.addSchemas(newDefinitions)
-                addApiResponse(
-                  name, ApiResponse()
-                    .description("")
-                    .content(
-                      Content()
-                        .addMediaType(
-                          "application/json", MediaType()
-                            .schema(returnTypeSchema)
-                        )
-                    )
-                )
-              }
-          }
       )
   }
 }
