@@ -41,8 +41,3 @@ As a web technology I chose [Javalin](https://javalin.io/). It is also
 very lightweight and I like the API, which is very similar to [express](https://expressjs.com/).
 It also doesn't require any reflection or annotations.
 
-A feature that I miss, is the generation of swagger definitions from the 
-source code (similar to [Springfox](https://springfox.github.io/springfox/)).
-But I started to implement the logic by myself. As I concentrate on my own
-use cases, the required time investment for the implementation is just a few days.
-

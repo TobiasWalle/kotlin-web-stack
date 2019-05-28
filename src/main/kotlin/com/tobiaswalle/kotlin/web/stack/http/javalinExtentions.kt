@@ -1,6 +1,6 @@
 package com.tobiaswalle.kotlin.web.stack.http
 
-import io.javalin.Context
+import io.javalin.http.Context
 import java.io.InputStream
 
 fun Context.htmlStream(stream: InputStream) {
